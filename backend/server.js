@@ -11,6 +11,8 @@ const allowedOrigins = [
   "http://192.168.181.130:3000",
   "http://127.0.0.1:3001",
   "http://192.168.181.130:57119",
+  "https://json-convertor-chat.onrender.com",
+  "https://json-convertor-excelupload.onrender.com",
 ];
 
 const server = http.createServer(function (req, res) {
