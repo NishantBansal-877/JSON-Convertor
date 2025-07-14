@@ -1,10 +1,10 @@
 {
   "name": "excelupload",
   "version": "1.0.0",
-  "main": "excelUpload/excel.js",
+  "main": "backend/server.js",
   "description": "Excel upload and processing server",
   "scripts": {
-    "start": "node excelUpload/excel.js"
+    "start": "node s"
   },
   "dependencies": {
     "adler-32": "^1.3.1",
