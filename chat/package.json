@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "backend/server.js",
   "scripts": {
-    "start": "node s"
+    "start": "node chat/script.js"
   },
   "dependencies": {
     "xlsx": "^0.18.5"
