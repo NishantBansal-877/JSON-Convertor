@@ -139,8 +139,7 @@ function sendToServer(file, fileName) {
     workbook.method = option;
 
     const workbookJson = JSON.stringify(workbook);
-
-    client.open("POST", "http://127.0.0.1:5000/json", true);
+    client.open("POST", "https://json-convertor-uhqz.onrender.com/json", true);
     client.setRequestHeader("content-type", "application/json");
     client.send(workbookJson);
     client.onreadystatechange = function () {
