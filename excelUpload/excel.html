@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Excel File Manager</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="excel.css" />
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+  </head>
+  <body>
+    <nav>
+      <div class="left-nav">
+        <img src="./icons8-excel.svg" alt="" />
+        <h1>Excel File Manager</h1>
+      </div>
+      <!-- <ul> -->
+      <!-- <li><a href="#">Log In</a></li>
+        <li><a href="#">Sign Up</a></li> -->
+      <!-- </ul> -->
+    </nav>
+    <div class="options">
+      <ul>
+        <li>
+          <a href="#">Add</a>
+        </li>
+        <li>
+          <a href="#">Update </a>
+        </li>
+        <li>
+          <a href="#">Delete </a>
+        </li>
+      </ul>
+    </div>
+    <div class="main">
+      <!-- Selected files -->
+      <div class="selected-div">
+        <div class="selected-head">
+          <p>Remove</p>
+          <p>Selected Files</p>
+          <p>Upload</p>
+        </div>
+        <div class="file-div">
+          <!-- <div class="file-container">
+            <button type="button"></button>
+            <p>hy.xml</p>
+            <input type="checkbox" name="checkbox" id="check" checked />
+          </div> -->
+        </div>
+      </div>
+      <!-- end of selected files -->
+
+      <!-- container for excel files -->
+      <div class="container">
+        <p>
+          Upload your Excel files, manage them, and send the data to a server.
+        </p>
+
+        <label class="upload-area">
+          Click to Select Excel File
+          <input
+            type="file"
+            id="fileInput"
+            accept=".xlsx,.xlsm,.xls,.xxlsb,.xltx,.xltm,.csv,.txt,.xlt"
+            multiple
+          />
+        </label>
+
+        <button id="sendAll" class="btn-primary" type="button">
+          Select method to do
+        </button>
+        <!-- <button id="sendServer" style="display: none" type="button"></button> -->
+      </div>
+      <!-- end of container  -->
+
+      <!-- status -->
+      <div class="status-div">
+        <div class="status-head">
+          <p>Files</p>
+          <p>Status</p>
+        </div>
+        <div class="file-div">
+          <!-- <div class="file-container"> -->
+          <!-- <p>1.</p>
+            <p>ftydggffghcgh.xml</p>
+            <p>Added</p> -->
+          <!-- </div> -->
+        </div>
+      </div>
+      <!-- end of status -->
+    </div>
+    <footer>
+      <div class="footer-div"><p>All rights are reserved</p></div>
+    </footer>
+    <script src="./excel.js"></script>
+  </body>
+</html>
