@@ -2,6 +2,9 @@ import { main } from "./AzureBot.js";
 import http from "http";
 import { handler } from "./jsonHandler.js";
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 const request = [];
 let reply;
 
