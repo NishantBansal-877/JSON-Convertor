@@ -13,7 +13,8 @@ const allowedOrigins = [
   "http://192.168.0.103:62726",
   "https://json-convertor-chat.onrender.com",
   "https://json-convertor-excelupload.onrender.com",
-  "https://azurechat.netlify.app"
+  "https://azurechat.netlify.app",
+  "https://exceload.netlify.app",
 ];
 
 const server = http.createServer(function (req, res) {
@@ -74,9 +75,9 @@ async function continousFunction(res) {
     const data = request.shift();
     try {
       reply = await handler(data);
-      console.log("reply:", reply);
+      // console.log("reply:", reply);
     } catch (err) {
-      console.error("Update error:", err);
+      // console.error("Update error:", err);
     }
     res.end(reply);
   }
