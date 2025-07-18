@@ -95,6 +95,7 @@ async function continousFunction(res) {
   }
   setTimeout(continousFunction, 1000);
 }
+console.log("ENV PORT:", process.env.PORT);
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, "0.0.0.0", function () {
