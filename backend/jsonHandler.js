@@ -1,6 +1,6 @@
 import XLSX from "xlsx";
 import dotenv from "dotenv";
-dotenv.config({ path: "./config.env" });
+
 import mongoose from "mongoose";
 
 const DB = process.env.DATABASE.replace("<PASSWORD>", process.env.DATABASE_PASSWORD);
