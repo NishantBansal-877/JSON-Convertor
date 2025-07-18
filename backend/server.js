@@ -13,6 +13,7 @@ const allowedOrigins = [
   "http://192.168.0.103:62726",
   "https://json-convertor-chat.onrender.com",
   "https://json-convertor-excelupload.onrender.com",
+  https://azurechat.netlify.app
 ];
 
 const server = http.createServer(function (req, res) {
