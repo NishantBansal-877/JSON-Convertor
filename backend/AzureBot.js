@@ -1,15 +1,12 @@
 import { AzureOpenAI } from "openai";
-import fs from "fs";
+import { Data } from "./jsonHandler.js";
 
-const endpoint = "https://nisha-mceqms79-eastus2.openai.azure.com/";
+const endpoint = process.env.ENDPOINT;
 const modelName = "gpt-4.1";
 const deployment = "gpt-4.1";
 
 export async function main(textContent) {
-  const data = JSON.parse(fs.readFileSync("./database/JSONDATA.json"));
-
-  const apiKey =
-    "DvOmXizoTU7rU93rOMLq69EIrMcLAZvqS3n4IxHlQ1BJNuPZxvYiJQQJ99BFACHYHv6XJ3w3AAAAACOG9BY0";
+  const apiKey = process.env.API_KEY;
   const apiVersion = "2024-04-01-preview";
   const options = {
     endpoint,
@@ -18,6 +15,7 @@ export async function main(textContent) {
     apiVersion,
   };
 
+  const data = await Data.find();
   const client = new AzureOpenAI(options);
 
   const response = await client.chat.completions.create({
@@ -60,7 +58,7 @@ Sales: $90K | Profit Margin: 25%<br><br>
 ⚠️ Never explain data structure or field names. Only extract and summarize the relevant information based on the user’s query.
 
 Here is the dataset:
-${JSON.stringify(data)}`,
+${data}`,
       },
       { role: "user", content: `${textContent}` },
     ],
