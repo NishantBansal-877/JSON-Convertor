@@ -19,7 +19,7 @@ const allowedOrigins = [
 
 const server = http.createServer(function (req, res) {
   const origin = req.headers.origin;
-
+ console.log("get request");
   if (allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   } else {
