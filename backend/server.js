@@ -1,6 +1,6 @@
 import { main } from "./AzureBot.js";
 import http from "http";
-import { update } from "./jsonHandler.js";
+import { handler } from "./jsonHandler.js";
 
 const request = [];
 let reply;
@@ -10,7 +10,7 @@ const allowedOrigins = [
   "http://127.0.0.1:5500",
   "http://192.168.181.130:3000",
   "http://127.0.0.1:3001",
-  "http://192.168.181.130:57119",
+  "http://192.168.0.103:62726",
   "https://json-convertor-chat.onrender.com",
   "https://json-convertor-excelupload.onrender.com",
 ];
@@ -31,6 +31,7 @@ const server = http.createServer(function (req, res) {
   }
   const pathName = req.url;
 
+  //for chat
   if (pathName == "/user") {
     let textContent = "";
 
@@ -51,6 +52,7 @@ const server = http.createServer(function (req, res) {
     });
   }
 
+  //for excel
   if (pathName == "/json") {
     let workbookJson = "";
 
@@ -59,6 +61,7 @@ const server = http.createServer(function (req, res) {
     });
 
     req.on("end", async () => {
+      console.log("got requesst");
       request.push(workbookJson);
       continousFunction(res);
     });
@@ -69,7 +72,7 @@ async function continousFunction(res) {
   if (request.length > 0) {
     const data = request.shift();
     try {
-      reply = await update(data);
+      reply = await handler(data);
       console.log("reply:", reply);
     } catch (err) {
       console.error("Update error:", err);
