@@ -82,9 +82,14 @@ body {
   padding: 10px 15px;
   border: none;
   border-radius: 20px;
-  background: #ffffff20;
+  background: #d1b7b720;
   color: white;
   font-size: 1rem;
+}
+
+::placeholder {
+  color: #f4f0f0;
+  opacity: 1; /* Firefox */
 }
 
 .chat-input #submit {
@@ -102,7 +107,6 @@ body {
   background: #3c3ca6;
 }
 
-/* Scrollbar for WebKit browsers */
 .chat-box::-webkit-scrollbar {
   width: 6px;
 }
