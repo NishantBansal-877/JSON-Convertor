@@ -87,6 +87,13 @@ fileDiv[0].addEventListener("fileDiv-changed", (e) => {
 
 sendBtn.addEventListener("click", function (e) {
   e.preventDefault();
+
+  option = sendBtn.textContent.trim().split(" ")[0];
+  if (option == "Select") {
+    console.log("return");
+    return;
+  }
+
   for (let i = allCheckbox.length - 1; i >= 0; i--) {
     const chk = allCheckbox[i];
     if (chk.checked == true) {
@@ -139,7 +146,7 @@ function sendToServer(file, fileName) {
     workbook.method = option;
 
     const workbookJson = JSON.stringify(workbook);
-    client.open("POST", "https://json-convertor-uhqz.onrender.com/json", true);
+    client.open("POST", "http://127.0.0.1:5000/json", true);
     client.setRequestHeader("content-type", "application/json");
     client.send(workbookJson);
     client.onreadystatechange = function () {
