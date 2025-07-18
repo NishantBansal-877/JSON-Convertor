@@ -12,7 +12,7 @@ submitBtn.addEventListener("click", function (e) {
   messageBot.insertAdjacentElement("afterend", newUserMessage);
 
   const request = new XMLHttpRequest();
-  request.open("POST", "https://json-convertor-uhqz.onrender.com/user", true);
+  request.open("POST", "http://127.0.0.1:5000/user", true);
   request.setRequestHeader("content-type", "plain/text");
   let responseBoxText = "";
   request.addEventListener("load", function () {
