@@ -85,10 +85,11 @@ async function continousFunction(res) {
   if (request.length > 0) {
     const data = request.shift();
     try {
-      reply = await handler(data);
-      // console.log("reply:", reply);
+      console.log("calling handler");
+     const reply = await handler(data);
+      console.log("reply:", reply);
     } catch (err) {
-      // console.error("Update error:", err);
+      console.error("Update error:", err);
     }
     res.end(reply);
   }
