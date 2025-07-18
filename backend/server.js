@@ -20,6 +20,10 @@ const allowedOrigins = [
 const server = http.createServer(function (req, res) {
   const origin = req.headers.origin;
  console.log("get request");
+ res.setHeader("Access-Control-Allow-Origin", origin || "*");  // always set
+res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  
   if (allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   } else {
@@ -27,11 +31,7 @@ const server = http.createServer(function (req, res) {
   }
 
   if (req.method === "OPTIONS") {
-    res.writeHead(204, {
-      "Access-Control-Allow-Origin": origin || "*",
-      "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
-    });
+    res.writeHead(204);
     return res.end();
   }
 
