@@ -64,8 +64,9 @@ const server = http.createServer(function (req, res) {
     });
   }
 
-  // Excel-to-JSON handler
-  else if (pathName === "/json") {
+
+  //for excel
+  if (pathName == "/json") {
     let workbookJson = "";
 
     req.on("data", (chunk) => {
@@ -73,22 +74,26 @@ const server = http.createServer(function (req, res) {
     });
 
     req.on("end", async () => {
-      console.log("Received /json request");
-      try {
-        const result = await handler(workbookJson);
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(result);
-      } catch (err) {
-        console.error("Handler error:", err);
-        res.writeHead(500);
-        res.end("Handler failed");
-      }
+      console.log("got requesst");
+      request.push(workbookJson);
+      continousFunction(res);
     });
-  } else {
-    res.writeHead(404);
-    res.end("Not Found");
   }
 });
+
+async function continousFunction(res) {
+  if (request.length > 0) {
+    const data = request.shift();
+    try {
+      reply = await handler(data);
+      // console.log("reply:", reply);
+    } catch (err) {
+      // console.error("Update error:", err);
+    }
+    res.end(reply);
+  }
+  setTimeout(continousFunction, 1000);
+}
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, "0.0.0.0", function () {
