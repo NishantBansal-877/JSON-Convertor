@@ -3,7 +3,7 @@ import http from "http";
 import { handler } from "./jsonHandler.js";
 
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({override:true});
 
 const request = [];
 let reply;
