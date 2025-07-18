@@ -1,111 +1,132 @@
-import fs from "fs";
 import XLSX from "xlsx";
+import dotenv from "dotenv";
+dotenv.config({ path: "./config.env" });
+import mongoose from "mongoose";
 
-export function update(workbookJson) {
-  let additionalData = JSON.parse(fs.readFileSync("./database/additional.json", "utf-8"));
+const DB = process.env.DATABASE.replace("<PASSWORD>", process.env.DATABASE_PASSWORD);
+const workbookData = [];
+
+//initialize monogodb connection
+await mongoose.connect(DB);
+console.log("DB connected");
+
+//creating schema
+const dataSchema = new mongoose.Schema({
+  workbookName: String,
+  workbookCreatedAt: String,
+  workbookData: Array,
+});
+
+//creating collections model
+export const Data = mongoose.model("Data", dataSchema);
+
+//current date function in format like--> 18/7/2025, 12:35:18 pm
+function date() {
+  const d = new Date();
+  return d.toLocaleString();
+}
+
+//adding sheets function in JSON format
+function addSheets(sheetsArray, sheetDataArray) {
+  let i = 0;
+  sheetsArray.forEach((sheetName) => {
+    workbookData.push({
+      sheetId: i,
+      sheetName: sheetName,
+      sheetCreatedAt: date(),
+      sheetData: XLSX.utils.sheet_to_json(sheetDataArray[i++], { defval: null }),
+    });
+  });
+}
+
+//exporting handler
+export async function handler(workbookJson) {
+  //if workbook is empty
   if (workbookJson == "") {
     return;
   }
-  let workbook = JSON.parse(workbookJson);
 
-  let jsonData = JSON.parse(fs.readFileSync("./database/JSONDATA.json", "utf-8"));
-  const workbookData = [];
+  let workbook = JSON.parse(workbookJson);
 
   let sheets = workbook.Sheets;
   const sheetsArray = Object.keys(sheets);
   const sheetDataArray = Object.values(sheets);
-  console.log(workbook.method);
+
+  //for adding files
   if (workbook.method == "Add") {
-    const idx = additionalData[0].workbookName.indexOf(workbook.fileName);
-    if (
-      additionalData[0].workbookName.includes(workbook.fileName) &&
-      jsonData[idx].workbookData != null
-    ) {
+    let existing = await Data.findOne({
+      workbookName: workbook.fileName,
+      workbookData: { $ne: null },
+    });
+
+    if (existing) {
       return "already exist";
     }
 
-    let i = 0;
-    sheetsArray.forEach((sheetName) => {
-      workbookData.push({
-        sheetId: i,
-        sheetName: sheetName,
-        sheetCreatedAt: Date.now(),
-        sheetData: XLSX.utils.sheet_to_json(sheetDataArray[i++], { defval: null }),
-      });
-    });
-    if (
-      additionalData[0].workbookName.includes(workbook.fileName) &&
-      jsonData[idx].workbookData == null
-    ) {
-      const booKdata = {
-        id: idx,
-        workbookName: workbook.fileName,
-        workbookCreatedAt: Date.now(),
-        workbookData: workbookData,
-      };
-      jsonData.splice(idx, 1, booKdata);
+    addSheets(sheetsArray, sheetDataArray);
+
+    existing = await Data.findOne({ workbookName: workbook.fileName, workbookData: { $eq: null } });
+
+    if (existing) {
+      await Data.findOneAndUpdate(
+        { workbookName: workbook.fileName },
+        {
+          workbookCreatedAt: date(),
+          workbookData: workbookData,
+        }
+      );
     } else {
-      jsonData = Array.from(jsonData);
-      const id = jsonData.length;
-      const booKdata = {
-        id: id,
+      await Data.create({
         workbookName: workbook.fileName,
-        workbookCreatedAt: Date.now(),
+        workbookCreatedAt: date(),
         workbookData: workbookData,
-      };
-      additionalData[0].workbookName.push(workbook.fileName);
-      jsonData.push(booKdata);
+      });
     }
-    fs.writeFileSync("./database/additional.json", JSON.stringify(additionalData));
-    fs.writeFileSync("./database/JSONDATA.json", JSON.stringify(jsonData), () => {
-      return;
-    });
+
     return "Added";
   }
+
+  //for updating files
   if (workbook.method == "Update") {
-    const idx = additionalData[0].workbookName.indexOf(workbook.fileName);
-    if (idx == -1) {
+    let existing = await Data.findOne({
+      workbookName: workbook.fileName,
+    });
+
+    if (!existing) {
       return "not exist";
     }
-    let i = 0;
-    sheetsArray.forEach((sheetName) => {
-      workbookData.push({
-        sheetId: i,
-        sheetName: sheetName,
-        sheetCreatedAt: Date.now(),
-        sheetData: XLSX.utils.sheet_to_json(sheetDataArray[i++], { defval: null }),
-      });
-    });
-    jsonData = Array.from(jsonData);
 
-    const booKdata = {
-      id: idx,
-      workbookName: workbook.fileName,
-      workbookUpdatedAt: Date.now(),
-      workbookData: workbookData,
-    };
-    jsonData.splice(idx, 1, booKdata);
-    fs.writeFileSync("./database/JSONDATA.json", JSON.stringify(jsonData), () => {
-      return;
-    });
+    addSheets(sheetsArray, sheetDataArray);
+
+    await Data.findOneAndUpdate(
+      { workbookName: workbook.fileName },
+      {
+        workbookCreatedAt: date(),
+        workbookData: workbookData,
+      }
+    );
+
     return "Updated";
   }
+
+  //for deleting files
   if (workbook.method == "Delete") {
-    jsonData = Array.from(jsonData);
-    const idx = additionalData[0].workbookName.indexOf(workbook.fileName);
-    if (idx == -1) {
+    let existing = await Data.findOne({
+      workbookName: workbook.fileName,
+    });
+
+    if (!existing) {
       return "not exist";
     }
-    const booKdata = {
-      id: idx,
-      workbookName: workbook.fileName,
-      workbookDeletedAt: Date.now(),
-      workbookData: null,
-    };
-    jsonData.splice(idx, 1, booKdata);
-    fs.writeFileSync("./database/JSONDATA.json", JSON.stringify(jsonData), () => {
-      return;
-    });
+
+    await Data.findOneAndUpdate(
+      { workbookName: workbook.fileName },
+      {
+        workbookCreatedAt: date(),
+        workbookData: null,
+      }
+    );
+
     return "Deleted";
   }
 }
