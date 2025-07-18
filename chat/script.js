@@ -12,7 +12,7 @@ submitBtn.addEventListener("click", function (e) {
   messageBot.insertAdjacentElement("afterend", newUserMessage);
 
   const request = new XMLHttpRequest();
-  request.open("POST", "https://13.228.225.19/user", true);
+  request.open("POST", "https://json-excel-server.onrender.com/user", true);
   request.setRequestHeader("content-type", "plain/text");
   let responseBoxText = "";
   request.addEventListener("load", function () {
